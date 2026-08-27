@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TRS 2026 · مصفاة جازان</title>
+<meta name="description" content="بوابة متابعة الإيقاف الشامل — مصفاة جازان TRS 2026">
+<meta name="theme-color" content="#F4F5F3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   JZRC · TRS 2026 — Mega Shutdown portal
+   Direction: "Dawn over the fence line".
+   Light first; dark is a toggle, never the default.
+   ========================================================== */
+:root{
+  --concrete:#F2F3F0;
+  --surface:#FFFFFF;
+  --surface-2:#F8F9F6;
+  --line:#E2E5E0;
+  --line-strong:#C8CEC7;
+  --ink:#12171A;
+  --ink-2:#4E585F;
+  --ink-3:#87919A;
+
+  --flare:#F5C518;
+  --flare-deep:#B98C00;
+  --flare-hover:#E4B510;
+  --flare-soft:#FDF6DC;
+  --on-flare:#141414;
+
+  --indigo:#1D2A4D;
+  --indigo-soft:#E7EAF3;
+  --sodium:#FF8A3D;
+
+  --alarm:#BF3434;
+  --alarm-soft:#FBEBEB;
+  --ok:#22714A;
+  --ok-soft:#E6F2EB;
+  --info:#26647E;
+  --info-soft:#E5F0F4;
+
+  --r:8px;
+  --r-sm:5px;
+  --shadow:0 1px 2px rgba(18,23,26,.05), 0 2px 14px rgba(18,23,26,.045);
+  --gutter:20px;
+  --maxw:1240px;
+  --font:"Alexandria",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+[data-theme="dark"]{
+  --concrete:#0E1216;
+  --surface:#161B20;
+  --surface-2:#1B2228;
+  --line:#28313A;
+  --line-strong:#3A4550;
+  --ink:#E8EAE7;
+  --ink-2:#A3ADB6;
+  --ink-3:#75808A;
+
+  --flare-deep:#F5C518;
+  --flare-soft:#2A2615;
+  --indigo:#93A6E0;
+  --indigo-soft:#1A2133;
+
+  --alarm:#EE7A7A;
+  --alarm-soft:#2A1919;
+  --ok:#5DC08A;
+  --ok-soft:#142218;
+  --info:#6FC0DC;
+  --info-soft:#122128;
+  --shadow:0 1px 2px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--concrete);color:var(--ink);
+  font-family:var(--font);font-size:15px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;min-height:100vh;
+  transition:background .2s ease,color .2s ease;
+}
+[hidden]{display:none !important}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select{font:inherit}
+:focus-visible{outline:2px solid var(--flare);outline-offset:2px;border-radius:2px}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.015em;line-height:1.28}
+p{margin:0}
+img{max-width:100%;display:block}
+
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;direction:ltr;unicode-bidi:isolate}
+.eyebrow{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+.muted{color:var(--ink-2)}
+.hazard-rule{height:3px;background:repeating-linear-gradient(135deg,var(--flare) 0 12px,transparent 12px 24px)}
+
+/* ---------------- top bar ---------------- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;gap:12px;min-height:60px}
+.brand{display:flex;align-items:center;gap:11px;margin-inline-end:auto;text-decoration:none;color:inherit;min-width:0}
+.logo-slot{display:flex;align-items:center;height:30px;flex:none}
+.logo-slot img{height:30px;width:auto}
+.logo-slot .sq{width:31px;height:31px;border-radius:var(--r-sm);background:var(--flare);display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:11px;color:var(--on-flare)}
+.brand-txt{min-width:0}
+.brand-txt b{display:block;font-size:14.5px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-txt span{display:block;font-size:11.5px;color:var(--ink-3);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;border:1px solid transparent;white-space:nowrap}
+.pill.day{background:var(--flare-soft);color:var(--flare-deep);border-color:var(--flare)}
+.pill.night{background:var(--indigo-soft);color:var(--indigo);border-color:var(--indigo)}
+.icon-btn{width:34px;height:34px;border-radius:var(--r-sm);border:1px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;font-size:14px;flex:none}
+.icon-btn:hover{border-color:var(--flare);background:var(--surface-2)}
+.txt-btn{padding:6px 12px;border-radius:var(--r-sm);border:1px solid var(--line-strong);background:var(--surface);font-size:12.5px;font-weight:500;flex:none}
+.txt-btn:hover{border-color:var(--flare)}
+
+nav.pages{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:60px;z-index:49}
+nav.pages .wrap{display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+nav.pages .wrap::-webkit-scrollbar{display:none}
+.pglink{background:none;border:0;border-bottom:2px solid transparent;padding:12px 0;font-size:13.5px;font-weight:400;color:var(--ink-2);white-space:nowrap}
+.pglink[aria-current="true"]{color:var(--ink);border-bottom-color:var(--flare);font-weight:600}
+
+.page{display:none;padding-block:26px 70px}
+.page.active{display:block}
+
+/* ---------------- cards ---------------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.card-head h3{font-size:14.5px}
+.card-body{padding:18px}
+.card-body.flush{padding:0}
+
+/* ============ SIGNATURE: the fence line ============ */
+.band{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;box-shadow:var(--shadow);margin-bottom:22px;
+}
+.sky{position:relative;height:clamp(150px,23vw,240px);overflow:hidden;background:linear-gradient(180deg,var(--sky-top),var(--sky-bot))}
+.sky[data-shift="day"]{--sky-top:#C6DEEC;--sky-bot:#F7EEDB;--plant:#38454E;--plant-2:#59676F;--haze:#DCE7EC;--lamp:#F5C518;--flame-a:#FFB020;--flame-b:#FFE9A8;--orb:#FFF3C9;--orb-o:.55}
+.sky[data-shift="night"]{--sky-top:#0B1230;--sky-bot:#26325B;--plant:#080D1A;--plant-2:#151E36;--haze:#1B2647;--lamp:#FF8A3D;--flame-a:#FF7A2F;--flame-b:#FFC24D;--orb:#DDE3F5;--orb-o:.75}
+[data-theme="dark"] .sky[data-shift="day"]{--sky-top:#7E9DB2;--sky-bot:#C4A97C;--plant:#20292F;--plant-2:#38454E}
+.skyline{position:absolute;inset:0;width:100%;height:100%}
+.flame{transform-origin:center bottom;animation:flicker 4.5s ease-in-out infinite}
+@keyframes flicker{0%,100%{transform:scaleY(1) scaleX(1);opacity:.95}50%{transform:scaleY(1.14) scaleX(.94);opacity:1}}
+.lamp-glow{animation:glow 6s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.5}50%{opacity:.85}}
+.sky-caption{
+  position:absolute;inset-block-end:14px;inset-inline-start:18px;z-index:2;
+  color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.45);
+}
+.sky[data-shift="day"] .sky-caption{color:#12171A;text-shadow:0 1px 12px rgba(255,255,255,.65)}
+.sky-caption .ph{font-size:clamp(19px,3.4vw,27px);font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.sky-caption .mt{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;opacity:.85;margin-top:3px}
+.today-mark{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--alarm);opacity:.9;z-index:1}
+.today-mark::after{
+  content:"";position:absolute;bottom:-4px;left:-4px;
+  width:8px;height:8px;border-radius:50%;background:var(--alarm);
+}
+
+.phases{display:flex;direction:ltr;height:46px;border-block:1px solid var(--line);background:var(--surface-2)}
+.phase{
+  position:relative;display:flex;flex-direction:column;justify-content:center;
+  padding-inline:9px;min-width:0;border-inline-end:1px solid var(--line);
+  font-size:11.5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--ink-3);
+}
+.phase:last-child{border-inline-end:0}
+.phase.done{color:var(--ink-2);background:var(--surface)}
+.phase.now{background:var(--flare);color:var(--on-flare);font-weight:600}
+.phase small{display:block;font-family:var(--mono);font-size:9.5px;opacity:.72}
+
+.band-head{display:flex;flex-wrap:wrap;gap:22px;padding:15px 18px;border-bottom:1px solid var(--line);align-items:flex-end}
+.band-stat{display:flex;flex-direction:column;gap:1px;min-width:0}
+.band-stat .v{font-family:var(--mono);font-size:24px;font-weight:600;line-height:1.12;letter-spacing:-.02em}
+.band-stat.push{margin-inline-start:auto;text-align:end}
+.curve{padding:14px 8px 2px}
+.curve-legend{display:flex;gap:16px;padding:0 16px 14px;font-size:11.5px;color:var(--ink-2);flex-wrap:wrap}
+.curve-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-inline-end:6px;vertical-align:-1px}
+
+/* ---------------- hero copy ---------------- */
+.hero{margin-bottom:20px;max-width:66ch}
+.hero h1{font-size:clamp(25px,4.4vw,36px);margin:9px 0 8px;font-weight:600}
+.hero p.lead{color:var(--ink-2);font-size:15px}
+
+/* ---------------- tiles ---------------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:24px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+.tile .v{font-family:var(--mono);font-size:25px;font-weight:600;line-height:1.15;margin-top:6px;letter-spacing:-.02em}
+.tile .d{font-size:12px;color:var(--ink-3);margin-top:2px}
+.tile.day .v{color:var(--flare-deep)}
+.tile.night .v{color:var(--indigo)}
+.tile.alarm .v{color:var(--alarm)}
+.tile.ok .v{color:var(--ok)}
+
+/* ---------------- modules ---------------- */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:36px 0 14px}
+.sec-head h2{font-size:18px}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:13px}
+.mod{
+  position:relative;text-align:start;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:17px 18px 17px 18px;display:flex;flex-direction:column;gap:6px;
+  box-shadow:var(--shadow);width:100%;overflow:hidden;
+  transition:border-color .15s ease,transform .15s ease;
+}
+.mod::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:3px;background:var(--line-strong)}
+.mod.is-live::before{background:var(--flare)}
+.mod:not([disabled]):hover{border-color:var(--flare);transform:translateY(-1px)}
+.mod[disabled]{opacity:.6;cursor:default}
+.mod h3{font-size:15px;padding-inline-end:52px}
+.mod p{font-size:12.8px;color:var(--ink-2);line-height:1.55}
+.badge{
+  position:absolute;inset-block-start:16px;inset-inline-end:16px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;font-weight:600;
+}
+.badge.live{background:var(--ok-soft);color:var(--ok)}
+.badge.soon{background:var(--surface-2);color:var(--ink-3);border:1px solid var(--line)}
+
+/* ---------------- forms ---------------- */
+.form-shell{max-width:640px;margin-inline:auto}
+.field{margin-top:18px}
+.field>label{display:block;margin-bottom:7px;font-size:13px;font-weight:500}
+.field input,.field select{width:100%;padding:11px 13px;border-radius:var(--r-sm);border:1px solid var(--line-strong);background:var(--surface);color:inherit}
+.field input:focus,.field select:focus{border-color:var(--flare)}
+.hint{margin-top:6px;font-size:12px;color:var(--ink-3);line-height:1.55}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.divider{height:1px;background:var(--line);margin-block:22px}
+
+.shift-select{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line-strong);border-radius:var(--r-sm);overflow:hidden}
+.shift-opt{background:var(--surface);border:0;padding:15px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:background .25s ease,color .25s ease}
+.shift-opt+.shift-opt{border-inline-start:1px solid var(--line-strong)}
+.shift-opt .glyph{font-size:19px;line-height:1}
+.shift-opt .label{font-size:15px;font-weight:600}
+.shift-opt .time{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.shift-opt:hover{background:var(--surface-2)}
+.shift-opt[aria-pressed="true"].day{background:var(--flare);color:var(--on-flare)}
+.shift-opt[aria-pressed="true"].day .time{color:rgba(20,20,20,.66)}
+.shift-opt[aria-pressed="true"].night{background:#1D2A4D;color:#fff}
+.shift-opt[aria-pressed="true"].night .time{color:rgba(255,255,255,.72)}
+
+.stepper{display:grid;grid-template-columns:54px 1fr 54px;gap:10px}
+.stepper button{border:1px solid var(--line-strong);background:var(--surface);border-radius:var(--r-sm);font-size:23px;line-height:1}
+.stepper button:hover{background:var(--flare);border-color:var(--flare);color:var(--on-flare)}
+.stepper input{text-align:center;font-family:var(--mono);font-size:31px;font-weight:600;padding-block:6px}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stepper input[type=number]{-moz-appearance:textfield}
+
+.btn{padding:8px 14px;border-radius:var(--r-sm);border:1px solid var(--line-strong);background:var(--surface);font-size:13px;font-weight:500}
+.btn:hover{border-color:var(--flare)}
+.btn.primary{background:var(--flare);border-color:var(--flare);color:var(--on-flare);font-weight:600}
+.btn.primary:hover{background:var(--flare-hover)}
+.btn.block{width:100%;padding:14px;font-size:15px;margin-top:22px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+.notice{margin-top:16px;padding:12px 14px;border-radius:var(--r-sm);font-size:13.5px;border-inline-start:3px solid var(--info);background:var(--info-soft);color:var(--ink)}
+.notice.ok{border-color:var(--ok);background:var(--ok-soft)}
+.notice.warn{border-color:var(--flare);background:var(--flare-soft)}
+.notice.err{border-color:var(--alarm);background:var(--alarm-soft)}
+.notice b{font-family:var(--mono)}
+
+.footnotes{margin-top:22px;display:grid;gap:9px}
+.footnote{display:flex;gap:10px;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.footnote .k{color:var(--flare-deep);font-family:var(--mono);font-size:11px;padding-top:2px;flex:none}
+
+/* ---------------- gate ---------------- */
+.gate{max-width:360px;margin:56px auto;text-align:center}
+.gate h2{font-size:19px;margin:12px 0 6px}
+.gate input{width:100%;padding:12px;text-align:center;font-family:var(--mono);font-size:21px;letter-spacing:.3em;border-radius:var(--r-sm);border:1px solid var(--line-strong);background:var(--surface);color:inherit;margin-top:16px}
+
+/* ---------------- dashboard ---------------- */
+.subtabs{display:flex;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.subtab{background:none;border:0;border-bottom:2px solid transparent;padding:9px 2px;margin-inline-end:24px;font-size:13.5px;font-weight:400;color:var(--ink-2);white-space:nowrap}
+.subtab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--flare);font-weight:600}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.toolbar input,.toolbar select{padding:7px 10px;border-radius:var(--r-sm);border:1px solid var(--line-strong);background:var(--surface);color:inherit;font-size:13px;max-width:100%}
+.dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+
+.gauge{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px;background:var(--surface);box-shadow:var(--shadow)}
+.gauge-track{display:flex;min-height:120px}
+.gauge-seg{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:18px 20px;min-width:0;overflow:hidden;transition:flex-basis .6s cubic-bezier(.4,0,.2,1)}
+.gauge-seg.day{background:var(--flare);color:var(--on-flare)}
+.gauge-seg.night{background:#1D2A4D;color:#fff}
+.gauge-seg .lab{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.82}
+.gauge-seg .val{font-family:var(--mono);font-size:clamp(30px,6.2vw,46px);font-weight:600;line-height:1;letter-spacing:-.03em}
+.gauge-seg .sub{font-size:12px;opacity:.78}
+.gauge-seg.empty{background:repeating-linear-gradient(135deg,var(--surface-2) 0 11px,var(--surface) 11px 22px);color:var(--ink-3);justify-content:center;align-items:center;text-align:center;padding:26px}
+.gauge-foot{display:flex;flex-wrap:wrap;gap:16px;padding:10px 18px;border-top:1px solid var(--line);background:var(--surface-2);font-size:12.5px;color:var(--ink-2)}
+.gauge-foot b{color:var(--ink);font-family:var(--mono);font-weight:600}
+
+.panels{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}
+.panel{margin-bottom:16px}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:9px 10px;text-align:start;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600;cursor:pointer;white-space:nowrap;position:sticky;top:0;background:var(--surface);z-index:1}
+thead th:hover{color:var(--flare-deep)}
+tbody tr:hover{background:var(--surface-2)}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:end;direction:ltr}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-family:var(--mono)}
+.tag.day{background:var(--flare-soft);color:var(--flare-deep)}
+.tag.night{background:var(--indigo-soft);color:var(--indigo)}
+.scroll{max-height:440px;overflow:auto;-webkit-overflow-scrolling:touch}
+
+.bars{display:grid;gap:10px;padding-block:4px}
+.bar-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;font-size:13px}
+.bar-track{grid-column:1/-1;height:7px;border-radius:3px;background:var(--surface-2);overflow:hidden;display:flex;border:1px solid var(--line)}
+.bar-track i{display:block;height:100%}
+.bar-track i.day{background:var(--flare)}
+.bar-track i.night{background:#1D2A4D}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line-strong);border-radius:999px;padding:3px 11px;font-size:12px;color:var(--ink-2)}
+.chip.missing{border-color:var(--alarm);color:var(--alarm);background:var(--alarm-soft)}
+.empty-state{padding:30px 16px;text-align:center;color:var(--ink-3);font-size:13.5px}
+
+/* ---------------- report ---------------- */
+.report{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(18px,4vw,28px);box-shadow:var(--shadow);overflow-x:auto}
+.report h2{font-size:20px;margin-bottom:2px}
+.rep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:12px;margin:20px 0}
+.rep-cell{border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px}
+.rep-cell .v{font-family:var(--mono);font-size:23px;font-weight:600;letter-spacing:-.02em}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:38px;font-size:12.5px;color:var(--ink-2)}
+.sig div{border-top:1px solid var(--line-strong);padding-top:7px}
+
+.sync{position:fixed;inset-block-end:calc(16px + env(safe-area-inset-bottom));inset-inline-start:16px;z-index:60;padding:7px 13px;border-radius:999px;font-size:12px;font-family:var(--mono);border:1px solid var(--flare);background:var(--flare-soft);color:var(--flare-deep)}
+
+footer.site{border-top:1px solid var(--line);padding-block:18px;color:var(--ink-3);font-size:12px;background:var(--surface)}
+footer.site .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ---------------- mobile tab bar ---------------- */
+.tabbar{
+  display:none;position:fixed;inset-inline:0;inset-block-end:0;z-index:55;
+  background:var(--surface);border-top:1px solid var(--line);
+  padding-block-end:env(safe-area-inset-bottom);
+}
+.tabbar .inner{display:grid;grid-template-columns:repeat(3,1fr)}
+.tabbar button{
+  background:none;border:0;padding:9px 4px 10px;display:flex;flex-direction:column;
+  align-items:center;gap:3px;font-size:11px;color:var(--ink-3);border-top:2px solid transparent;margin-top:-1px;
+}
+.tabbar button .g{font-size:17px;line-height:1}
+.tabbar button[aria-current="true"]{color:var(--ink);border-top-color:var(--flare);font-weight:600}
+
+/* ---------------- responsive ---------------- */
+@media(max-width:940px){ .panels{grid-template-columns:1fr} }
+@media(max-width:760px){
+  :root{--gutter:15px}
+  nav.pages{display:none}
+  .tabbar{display:block}
+  .page{padding-block:20px 92px}
+  .topbar .wrap{min-height:54px}
+  .brand-txt span{display:none}
+  .status{font-size:12px}
+  .tiles{grid-template-columns:1fr 1fr;gap:10px}
+  .tile .v{font-size:21px}
+  .band-head{gap:16px;padding:13px 15px}
+  .band-stat .v{font-size:20px}
+  .band-stat.push{margin-inline-start:0}
+  .mods{grid-template-columns:1fr}
+  .sec-head{margin-top:28px}
+  .toolbar{width:100%}
+  .toolbar input[type=search]{flex:1 1 100%;width:auto !important}
+  .dash-head{gap:12px}
+  .gauge-track{min-height:104px}
+  .gauge-seg{padding:14px 15px}
+  .phases{height:42px}
+  .phase{font-size:10.5px;padding-inline:6px}
+  .phase small{display:none}
+  .phase:not(.now){font-size:0}
+  .phase.now{font-size:11.5px}
+  .sky-caption{inset-inline-start:15px;inset-block-end:12px}
+  .row2{grid-template-columns:1fr}
+  .sig{grid-template-columns:1fr;gap:26px}
+  .scroll{max-height:none}
+  .card-head{padding:13px 15px}
+  .card-body{padding:15px}
+}
+@media(max-width:420px){
+  .gauge-track{flex-direction:column}
+  .gauge-seg{flex-basis:auto !important;padding:13px 15px}
+  .gauge-seg .val{font-size:30px}
+  .stepper{grid-template-columns:48px 1fr 48px}
+}
+
+@media print{
+  .topbar,nav.pages,.toolbar,.subtabs,.sync,.tabbar,footer.site,.hazard-rule,.sky{display:none !important}
+  body{background:#fff}
+  .card,.report,.gauge,.tile,.band{border-color:#bbb;box-shadow:none;break-inside:avoid}
+  .scroll{max-height:none}
+  .page{padding-block:0}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="hazard-rule"></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#" id="brandLink">
+      <span class="logo-slot">
+        <img id="orgLogo" src="assets/aramco.svg" alt="Saudi Aramco"
+             onerror="this.remove();document.getElementById('logoFallback').hidden=false">
+        <span class="sq" id="logoFallback" hidden>TRS</span>
+      </span>
+      <span class="brand-txt"><b data-i18n="brand">مصفاة جازان</b><span data-i18n="brand_sub">الإيقاف الشامل ٢٠٢٦</span></span>
+    </a>
+    <div class="status">
+      <span class="num" id="clock">--:--</span>
+      <span class="pill day" id="shiftPill">—</span>
+    </div>
+    <button class="icon-btn" id="themeBtn" type="button" title="الوضع الليلي/النهاري">🌙</button>
+    <button class="txt-btn" id="langBtn" type="button">EN</button>
+  </div>
+</header>
+
+<nav class="pages">
+  <div class="wrap">
+    <button class="pglink" data-page="home" aria-current="true" data-i18n="nav_home">الرئيسية</button>
+    <button class="pglink" data-page="headcount" data-i18n="nav_headcount">حصر العمالة</button>
+    <button class="pglink" data-page="report" data-i18n="nav_report">التقرير اليومي</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= HOME ================= -->
+<section class="page active" id="page-home"><div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow" data-i18n="hero_eyebrow">Mega shutdown · turnaround 2026</p>
+    <h1 data-i18n="hero_title">متابعة الإيقاف الشامل لمصفاة جازان</h1>
+    <p class="lead" data-i18n="hero_lead">مكان واحد لأرقام الموقع اليومية: العمالة الحاضرة، مرحلة الشت داون، وسير الأعمال — بدون انتظار تقارير آخر اليوم.</p>
+  </div>
+
+  <div class="band">
+    <div class="sky" id="sky" data-shift="day">
+      <svg class="skyline" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <circle cx="300" cy="96" r="28" fill="var(--orb)" opacity="var(--orb-o)"/>
+        <rect x="0" y="232" width="1200" height="68" fill="var(--haze)" opacity=".45"/>
+
+        <g fill="var(--plant-2)">
+          <rect x="60" y="235" width="78" height="65" rx="3"/>
+          <rect x="158" y="256" width="54" height="44" rx="3"/>
+          <path d="M250 300 L264 190 L318 190 L332 300 Z"/>
+          <rect x="350" y="222" width="62" height="78" rx="3"/>
+          <rect x="424" y="236" width="46" height="64" rx="3"/>
+          <rect x="486" y="176" width="14" height="124"/>
+          <rect x="511" y="200" width="11" height="100"/>
+          <rect x="1000" y="228" width="92" height="72" rx="3"/>
+          <rect x="1112" y="250" width="70" height="50" rx="3"/>
+        </g>
+
+        <g fill="var(--plant)">
+          <!-- crude and vacuum columns -->
+          <rect x="536" y="132" width="36" height="168" rx="2"/>
+          <path d="M536 134 q18 -20 36 0 z"/>
+          <rect x="528" y="172" width="52" height="5"/><rect x="528" y="214" width="52" height="5"/>
+          <rect x="528" y="256" width="52" height="5"/>
+          <rect x="592" y="168" width="26" height="132" rx="2"/>
+          <rect x="585" y="202" width="40" height="4"/><rect x="585" y="242" width="40" height="4"/>
+          <rect x="585" y="278" width="40" height="4"/>
+          <rect x="636" y="202" width="19" height="98" rx="2"/>
+          <rect x="630" y="234" width="31" height="4"/><rect x="630" y="270" width="31" height="4"/>
+
+          <!-- LPG spheres -->
+          <circle cx="700" cy="254" r="30"/>
+          <rect x="676" y="276" width="5" height="24"/><rect x="720" y="276" width="5" height="24"/>
+          <rect x="698" y="278" width="5" height="22"/>
+          <circle cx="774" cy="264" r="21"/>
+          <rect x="757" y="280" width="4" height="20"/><rect x="789" y="280" width="4" height="20"/>
+
+          <!-- flare stack -->
+          <rect x="856" y="112" width="13" height="188"/>
+          <rect x="848" y="168" width="29" height="4"/><rect x="848" y="230" width="29" height="4"/>
+
+          <!-- storage tanks -->
+          <rect x="898" y="244" width="82" height="56" rx="2"/>
+          <ellipse cx="939" cy="244" rx="41" ry="8"/>
+
+          <!-- piperack -->
+          <rect x="180" y="278" width="970" height="5"/>
+          <rect x="180" y="289" width="970" height="4"/>
+          <rect x="230" y="278" width="6" height="22"/><rect x="360" y="278" width="6" height="22"/>
+          <rect x="470" y="278" width="6" height="22"/><rect x="660" y="278" width="6" height="22"/>
+          <rect x="830" y="278" width="6" height="22"/><rect x="980" y="278" width="6" height="22"/>
+          <rect x="1100" y="278" width="6" height="22"/>
+        </g>
+
+        <g class="flame" style="transform-origin:862px 112px">
+          <path d="M855 112 C848 96 858 88 862 78 C868 90 878 96 870 112 Z" fill="var(--flame-a)"/>
+          <path d="M859 112 C856 102 860 96 862 88 C866 98 868 104 865 112 Z" fill="var(--flame-b)"/>
+        </g>
+
+        <g class="lamp-glow" fill="var(--lamp)">
+          <circle cx="554" cy="128" r="4"/><circle cx="605" cy="164" r="3"/>
+          <circle cx="939" cy="238" r="3"/><circle cx="862" cy="166" r="3"/>
+        </g>
+      </svg>
+      <div class="today-mark" id="todayMark" hidden></div>
+      <div class="sky-caption" id="skyCaption"></div>
+    </div>
+    <div class="phases" id="phases"></div>
+    <div class="band-head" id="bandHead"></div>
+    <div class="curve" id="curve"></div>
+    <div class="curve-legend">
+      <span><i style="background:var(--line-strong)"></i><span data-i18n="lg_plan">العمالة المخططة</span></span>
+      <span><i style="background:var(--day-fill)"></i><span data-i18n="s_day">نهار</span></span>
+      <span><i style="background:var(--night-fill)"></i><span data-i18n="s_night">ليل</span></span>
+    </div>
+  </div>
+
+  <div class="tiles" id="homeTiles"></div>
+
+  <div class="sec-head">
+    <h2 data-i18n="sec_modules">أقسام المتابعة</h2>
+    <span class="eyebrow" id="modCount"></span>
+  </div>
+  <div class="mods" id="mods"></div>
+
+</div></section>
+
+<!-- ================= HEADCOUNT ================= -->
+<section class="page" id="page-headcount"><div class="wrap">
+  <div class="subtabs" role="tablist">
+    <button class="subtab" id="st-submit" role="tab" aria-selected="true" data-i18n="tab_submit">تسجيل الحصر</button>
+    <button class="subtab" id="st-dash" role="tab" aria-selected="false" data-i18n="tab_dash">لوحة المتابعة</button>
+  </div>
+
+  <!-- submit -->
+  <div id="hc-submit">
+    <div class="form-shell">
+      <div style="margin-bottom:16px">
+        <p class="eyebrow" data-i18n="brief_eyebrow">Headcount</p>
+        <h1 style="font-size:clamp(21px,4vw,27px);margin:6px 0 6px" data-i18n="brief_title">كم شخص موجود فعلياً في الموقع الآن؟</h1>
+        <p class="muted" style="font-size:14px" data-i18n="brief_desc">سجّل عدد العمالة الحاضرة لورديتك. لو تغيّر العدد، أرسل مرة ثانية بنفس رقم البادج ويتحدّث فوراً.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="eyebrow" data-i18n="form_head">نموذج الحصر</span>
+          <span class="eyebrow" id="formDate">—</span>
+        </div>
+        <div class="card-body">
+          <div class="field" style="margin-top:0">
+            <label data-i18n="f_shift">الوردية</label>
+            <div class="shift-select" role="group">
+              <button type="button" class="shift-opt day" data-shift="day" aria-pressed="true">
+                <span class="glyph">☀</span><span class="label" data-i18n="s_day">نهار</span><span class="time num">06:00 – 18:00</span>
+              </button>
+              <button type="button" class="shift-opt night" data-shift="night" aria-pressed="false">
+                <span class="glyph">☾</span><span class="label" data-i18n="s_night">ليل</span><span class="time num">18:00 – 06:00</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f_count" data-i18n="f_count">عدد العمالة الحاضرة في الموقع</label>
+            <div class="stepper">
+              <button type="button" id="minus" aria-label="−">−</button>
+              <input id="f_count" type="number" min="0" max="9999" step="1" value="0" inputmode="numeric">
+              <button type="button" id="plus" aria-label="+">+</button>
+            </div>
+            <p class="hint" data-i18n="h_count">العدد الموجود فعلياً داخل الموقع — وليس العمالة المخططة.</p>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="field" style="margin-top:0">
+            <label for="f_company" data-i18n="f_company">الشركة</label>
+            <select id="f_company"></select>
+          </div>
+          <div class="field" id="otherWrap" hidden>
+            <label for="f_other" data-i18n="f_other">اسم الشركة</label>
+            <input id="f_other" type="text" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label for="f_area" data-i18n="f_area">منطقة العمل الرئيسية</label>
+            <select id="f_area"></select>
+          </div>
+          <div class="field" id="areaOtherWrap" hidden>
+            <label for="f_area_other" data-i18n="f_area_other">اكتب الموقع / المنطقة</label>
+            <input id="f_area_other" type="text" autocomplete="off">
+            <p class="hint" data-i18n="h_area_other">مثال: Block #3 · Decontamination 45 · Crude Oil Tank 106</p>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label for="f_person" data-i18n="f_person">اسم المسؤول</label>
+              <input id="f_person" type="text" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="f_badge" data-i18n="f_badge">رقم البادج</label>
+              <input id="f_badge" type="text" inputmode="numeric" autocomplete="off">
+            </div>
+          </div>
+          <p class="hint" data-i18n="h_badge">رقم البادج يحمي تسجيلك — لا أحد يقدر يعدّله إلا بنفس الرقم.</p>
+          <div class="field">
+            <label for="f_date" data-i18n="f_date">تاريخ الوردية</label>
+            <input id="f_date" type="date">
+          </div>
+          <button class="btn primary block" id="submitBtn" type="button" data-i18n="btn_submit">إرسال الحصر</button>
+          <div id="formMsg"></div>
+        </div>
+      </div>
+
+      <div class="footnotes">
+        <div class="footnote"><span class="k">01</span><span data-i18n="fn1">الإرسال يذهب مباشرة للوحة المتابعة الإدارية ولا يظهر لبقية المقاولين.</span></div>
+        <div class="footnote"><span class="k">02</span><span data-i18n="fn2">لو الشبكة ضعيفة في الموقع، يُحفظ الحصر في جهازك ويُرسل تلقائياً عند رجوع الاتصال.</span></div>
+        <div class="footnote"><span class="k">03</span><span data-i18n="fn3">تسجيل واحد لكل شركة في كل وردية — الإرسال الثاني يحدّث الأول ولا يُضاف فوقه.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- dashboard -->
+  <div id="hc-dash" hidden>
+    <div class="gate" id="gate">
+      <p class="eyebrow">Restricted</p>
+      <h2 data-i18n="gate_title">لوحة المتابعة الإدارية</h2>
+      <p class="muted" style="font-size:13.5px" data-i18n="gate_desc">أدخل رمز الدخول لعرض أرقام الحصر.</p>
+      <input id="pin" type="password" inputmode="numeric" maxlength="8" placeholder="••••">
+      <button class="btn primary" id="pinBtn" style="width:100%;margin-top:12px;padding:12px" data-i18n="gate_btn">دخول</button>
+      <div id="pinMsg"></div>
+    </div>
+
+    <div id="dash" hidden>
+      <div class="dash-head">
+        <div><p class="eyebrow" data-i18n="dash_eyebrow">Live headcount</p><h1 style="font-size:22px;margin-top:4px" data-i18n="dash_title">حصر العمالة</h1></div>
+        <div class="toolbar">
+          <input type="date" id="d_date">
+          <select id="d_area"></select>
+          <input type="search" id="d_search" style="width:150px">
+          <button class="btn" id="exportBtn" data-i18n="btn_export">تصدير Excel</button>
+          <button class="btn" id="refreshBtn" data-i18n="btn_refresh">تحديث</button>
+        </div>
+      </div>
+
+      <div class="gauge">
+        <div class="gauge-track" id="gaugeTrack"></div>
+        <div class="gauge-foot" id="gaugeFoot"></div>
+      </div>
+
+      <div class="tiles" id="kpis"></div>
+
+      <div class="panels">
+        <div>
+          <div class="card panel">
+            <div class="card-head"><h3 data-i18n="p_companies">الحصر حسب الشركة</h3><span class="eyebrow" id="coCount"></span></div>
+            <div class="card-body flush"><div class="scroll"><table id="tblCompanies"></table></div></div>
+          </div>
+          <div class="card panel">
+            <div class="card-head"><h3 data-i18n="p_trend">آخر ١٤ يوم</h3></div>
+            <div class="card-body" id="trendWrap"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card panel">
+            <div class="card-head"><h3 data-i18n="p_missing">لم تُبلّغ بعد</h3><span class="eyebrow" id="missingCount"></span></div>
+            <div class="card-body"><div class="chips" id="missingChips"></div></div>
+          </div>
+          <div class="card panel">
+            <div class="card-head"><h3 data-i18n="p_areas">التوزيع حسب المنطقة</h3></div>
+            <div class="card-body"><div class="bars" id="areaBars"></div></div>
+          </div>
+          <div class="card panel">
+            <div class="card-head"><h3 data-i18n="p_log">آخر التسجيلات</h3></div>
+            <div class="card-body flush"><div class="scroll" style="max-height:290px"><table id="tblLog"></table></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= DAILY REPORT ================= -->
+<section class="page" id="page-report"><div class="wrap">
+  <div class="dash-head">
+    <div><p class="eyebrow" data-i18n="rep_eyebrow">Daily report</p><h1 style="font-size:22px;margin-top:4px" data-i18n="rep_title">التقرير اليومي</h1></div>
+    <div class="toolbar">
+      <input type="date" id="r_date">
+      <button class="btn" id="repPrint" data-i18n="btn_print">طباعة / PDF</button>
+      <button class="btn" id="repCopy" data-i18n="btn_copy">نسخ كنص</button>
+    </div>
+  </div>
+  <div class="report" id="reportBody"></div>
+</div></section>
+
+</main>
+
+<footer class="site"><div class="wrap">
+  <span>JZRC · TRS 2026 · <span data-i18n="brand">مصفاة جازان</span></span>
+  <span class="num" id="footStamp"></span>
+</div></footer>
+
+<nav class="tabbar" aria-label="التنقل"><div class="inner">
+  <button data-page="home" aria-current="true"><span class="g">▤</span><span data-i18n="nav_home">الرئيسية</span></button>
+  <button data-page="headcount"><span class="g">☰</span><span data-i18n="nav_headcount">حصر العمالة</span></button>
+  <button data-page="report"><span class="g">▣</span><span data-i18n="nav_report">التقرير اليومي</span></button>
+</div></nav>
+
+<div class="sync" id="syncBadge" hidden></div>
+
+<script>
+/* ==========================================================
+   1) CONFIG — عدّل هنا فقط
+   ========================================================== */
+const CONFIG = {
+  apiUrl: "",                 // رابط Google Apps Script (اتركه فارغاً للتجربة المحلية)
+  pin: "2026",
+  tz: "Asia/Riyadh",
+  dayStart: 6,
+  nightStart: 18,
+
+  // ── خطة الإيقاف الشامل ─────────────────────────────
+  shutdown: {
+    code: "TRS 2026",
+    start: "2026-07-20",
+    end:   "2026-10-31",
+    // ★ التشغيل (10 أكتوبر) مؤكد من رمزي. باقي التواريخ والأعداد لا تزال تقديرية.
+    phases: [
+      {ar:"التحضير",        en:"Preparation",   start:"2026-07-20", planned:1200},
+      {ar:"الإيقاف",         en:"Shutdown",      start:"2026-08-01", planned:2500},
+      {ar:"التنظيف والعزل",  en:"Decon & blind", start:"2026-08-08", planned:4000},
+      {ar:"الفحص",          en:"Inspection",    start:"2026-08-16", planned:5200},
+      {ar:"التنفيذ والإصلاح",en:"Execution",     start:"2026-08-22", planned:6000},
+      {ar:"إعادة التركيب",   en:"Reinstatement", start:"2026-09-25", planned:4200},
+      {ar:"التشغيل",         en:"Start-up",      start:"2026-10-10", planned:1500}
+    ]
+  },
+
+  // ── مؤشرات السلامة (حدّثها يدوياً أو اربطها لاحقاً) ──
+  hse: { lastIncident:"2026-06-14", manhoursMillions:2.4, permitsToday:0 },
+
+  companies: ["Diamond (Apex)","Poly Tech","AYTB","ABIS (Al-Barrak)","KANOOZ","ZOMCO","RAPCO","SAFARI","United SAAM","AL Busailai","RISAL","TAMIMI","FSN","Al Otaishan","SAJA","KAEFER","CALEX","MASTOURA","ARABIAN FAL","IT IS","Bin Zagar","Descon Olayan","Expertise","Yuhan Tu","KOCH","ANABEEB","Almeer","MACE","GLOBAL CONSTRUCTION","QCS","SMH","TOTAL SAFETY","INTEGRATED GLOBAL","AL IMAN","WAHAH ELECTRIC","ASAS ALJOOD","DAYIM","ABB PROJECTS COMPANY","KANOO","SAUDI INDUSTRIAL GAS","AVEVA","Precision","TUV","ALMUZAIN","Endress+Hauser","HSM","Logigates","John Crane"],
+
+  // مناطق العمل — مأخوذة من الشيت. اختيار "موقع آخر" يفتح خانة كتابة حرة
+  areas: ["CDU","VDU","HCK","GTU","DHT","SFU","NHT","ARO","SRU","OME","ITC","Utility","Piperack","Decontamination","Blocks","Block #2","Block #3","Block #4","Crude Oil Tank","IDMS","Camp","Kitchen","Laydown / Workshop"],
+
+  // بيانات مُدخلة مسبقاً ليوم واحد فقط. الأيام الجاية يدخلها المقاولون بأنفسهم.
+  // كل صف: [الشركة, الليل, النهار, منطقة العمل]
+  seed: {
+    date:"2026-08-26", person:"Ramzi", badge:"292201",
+    rows:[
+      ["Diamond (Apex)",18,38,"SFU"],
+      ["Poly Tech",24,29,"GTU / DHT"],
+      ["AYTB",160,382,""],
+      ["ABIS (Al-Barrak)",326,316,"Block #3"],
+      ["KANOOZ",23,558,"HCK"],
+      ["ZOMCO",25,101,"Kitchen"],
+      ["RAPCO",0,31,""],
+      ["SAFARI",35,237,""],
+      ["United SAAM",11,67,"Utility"],
+      ["AL Busailai",1,50,"ITC"],
+      ["RISAL",30,52,"GTU 24 / 6 Piperack"],
+      ["TAMIMI",129,630,"Camp"],
+      ["FSN",0,15,""],
+      ["Al Otaishan",41,128,""],
+      ["SAJA",19,45,"TRS IDMS 3 / CDU 8 / NHT 2 / ARO 6"],
+      ["KAEFER",12,209,""],
+      ["CALEX",0,18,""],
+      ["MASTOURA",1,15,""],
+      ["ARABIAN FAL",0,55,""],
+      ["IT IS",4,27,"OME"],
+      ["Bin Zagar",0,36,"Block #4"],
+      ["Descon Olayan",77,309,""],
+      ["Expertise",360,450,"Decontamination 45 / Blocks 315"],
+      ["Yuhan Tu",0,3,"Block #2"],
+      ["KOCH",88,96,"VDU"],
+      ["ANABEEB",47,56,"CDU / VDU / HCK"],
+      ["Almeer",10,79,""],
+      ["MACE",0,4,""],
+      ["GLOBAL CONSTRUCTION",11,33,""],
+      ["QCS",0,2,""],
+      ["SMH",0,2,""],
+      ["TOTAL SAFETY",2,7,"Crude Oil Tank 106"],
+      ["INTEGRATED GLOBAL",0,0,""],
+      ["AL IMAN",0,0,""],
+      ["WAHAH ELECTRIC",0,0,""],
+      ["ASAS ALJOOD",0,0,""],
+      ["DAYIM",0,0,""],
+      ["ABB PROJECTS COMPANY",0,0,""],
+      ["KANOO",0,0,""],
+      ["SAUDI INDUSTRIAL GAS",20,21,""],
+      ["AVEVA",0,1,""],
+      ["Precision",0,37,"OME"],
+      ["TUV",2,0,""],
+      ["ALMUZAIN",0,163,""],
+      ["Endress+Hauser",0,0,""],
+      ["HSM",0,0,""],
+      ["Logigates",0,0,""],
+      ["John Crane",0,0,""]
+    ]
+  },
+
+  // ── أقسام البوابة ──────────────────────────────────
+  modules: [
+    {id:"headcount", ic:"👷", ar:"حصر العمالة", en:"Headcount", live:true,
+     ar_d:"عدد العمالة الحاضرة نهاراً وليلاً لكل مقاول، مع لوحة متابعة وتقارير Excel.",
+     en_d:"Day and night contractor headcount with a live dashboard and Excel reports."},
+    {id:"report", ic:"📄", ar:"التقرير اليومي", en:"Daily report", live:true,
+     ar_d:"تقرير جاهز للطباعة يجمع أرقام اليوم ومرحلة الشت داون والشركات الناقصة.",
+     en_d:"Print-ready daily sheet: today's figures, current phase and missing contractors."},
+    {id:"progress", ic:"📈", ar:"تقدّم الأعمال", en:"Work progress", live:false,
+     ar_d:"منحنى S المخطط مقابل الفعلي، ونسبة الإنجاز لكل منطقة وتخصص.",
+     en_d:"Planned vs actual S-curve, plus percent complete by area and discipline."},
+    {id:"permits", ic:"📋", ar:"تصاريح العمل", en:"Permits to work", live:false,
+     ar_d:"عدد التصاريح المفتوحة يومياً، الأعمال الساخنة والدخول للأماكن المغلقة.",
+     en_d:"Daily open permits, hot work and confined space entries."},
+    {id:"hse", ic:"🦺", ar:"السلامة", en:"HSE", live:false,
+     ar_d:"أيام بدون حادث، الملاحظات والحوادث الوشيكة، وجلسات التوعية.",
+     en_d:"Days without incident, observations, near misses and toolbox talks."},
+    {id:"punch", ic:"✅", ar:"قائمة الملاحظات", en:"Punch list", live:false,
+     ar_d:"ملاحظات A و B المفتوحة والمغلقة قبل التسليم وإعادة التشغيل.",
+     en_d:"Open and closed A/B items before handover and start-up."},
+    {id:"equipment", ic:"⚙️", ar:"حالة المعدات", en:"Equipment status", live:false,
+     ar_d:"متابعة الأبراج والمبادلات والأوعية: فتح، فحص، إصلاح، إغلاق.",
+     en_d:"Columns, exchangers and vessels: opened, inspected, repaired, boxed up."},
+    {id:"scaffold", ic:"🏗️", ar:"السقالات", en:"Scaffolding", live:false,
+     ar_d:"طلبات التركيب والفك، والسقالات المستلمة قيد الاستخدام.",
+     en_d:"Erection and dismantling requests, and handed-over scaffolds in use."},
+    {id:"logistics", ic:"🚚", ar:"الدخول والخدمات", en:"Access & logistics", live:false,
+     ar_d:"تصاريح الدخول، الباصات، مواقف المعدات، ومخيمات العمالة.",
+     en_d:"Gate passes, buses, equipment parking and workforce camps."}
+  ]
+};
+
+/* ==========================================================
+   2) i18n
+   ========================================================== */
+const I18N = {
+ar:{
+ brand:"مصفاة جازان", brand_sub:"الإيقاف الشامل ٢٠٢٦",
+ nav_home:"الرئيسية", nav_headcount:"حصر العمالة", nav_report:"التقرير اليومي",
+ hero_eyebrow:"Mega shutdown · turnaround 2026",
+ hero_title:"متابعة الإيقاف الشامل لمصفاة جازان",
+ hero_lead:"مكان واحد لأرقام الموقع اليومية: العمالة الحاضرة، مرحلة الشت داون، وسير الأعمال — بدون انتظار تقارير آخر اليوم.",
+ sec_modules:"أقسام المتابعة", lg_plan:"العمالة المخططة",
+ b_phase:"المرحلة الحالية", b_day:"اليوم", b_left:"المتبقي", b_elapsed:"مضى",
+ b_of:"من", days:"يوم", before_start:"قبل البداية", finished:"انتهى",
+ t_onsite:"في الموقع الآن", t_plan:"مقابل المخطط", t_reported:"شركات بلّغت", t_safe:"يوم بدون حادث",
+ t_manhours:"مليون ساعة عمل", t_missing:"لم تبلّغ",
+ mod_open:"افتح", badge_live:"يعمل", badge_soon:"قريباً",
+ tab_submit:"تسجيل الحصر", tab_dash:"لوحة المتابعة",
+ brief_eyebrow:"Headcount", brief_title:"كم شخص موجود فعلياً في الموقع الآن؟",
+ brief_desc:"سجّل عدد العمالة الحاضرة لورديتك. لو تغيّر العدد، أرسل مرة ثانية بنفس رقم البادج ويتحدّث فوراً.",
+ form_head:"نموذج الحصر", f_shift:"الوردية", s_day:"نهار", s_night:"ليل",
+ f_count:"عدد العمالة الحاضرة في الموقع", h_count:"العدد الموجود فعلياً داخل الموقع — وليس العمالة المخططة.",
+ f_company:"الشركة", f_other:"اسم الشركة", f_area:"منطقة العمل الرئيسية",
+ f_person:"اسم المسؤول", f_badge:"رقم البادج",
+ f_area_other:"اكتب الموقع / المنطقة", other_area:"موقع آخر — اكتبه",
+ h_area_other:"مثال: Block #3 · Decontamination 45 · Crude Oil Tank 106",
+ err_area:"اختر منطقة العمل أو اكتبها.",
+ h_badge:"رقم البادج يحمي تسجيلك — لا أحد يقدر يعدّله إلا بنفس الرقم.",
+ f_date:"تاريخ الوردية", btn_submit:"إرسال الحصر",
+ fn1:"الإرسال يذهب مباشرة للوحة المتابعة الإدارية ولا يظهر لبقية المقاولين.",
+ fn2:"لو الشبكة ضعيفة في الموقع، يُحفظ الحصر في جهازك ويُرسل تلقائياً عند رجوع الاتصال.",
+ fn3:"تسجيل واحد لكل شركة في كل وردية — الإرسال الثاني يحدّث الأول ولا يُضاف فوقه.",
+ gate_title:"لوحة المتابعة الإدارية", gate_desc:"أدخل رمز الدخول لعرض أرقام الحصر.", gate_btn:"دخول",
+ dash_eyebrow:"Live headcount", dash_title:"حصر العمالة",
+ btn_export:"تصدير Excel", btn_refresh:"تحديث", btn_print:"طباعة / PDF", btn_copy:"نسخ كنص",
+ p_companies:"الحصر حسب الشركة", p_trend:"آخر ١٤ يوم", p_missing:"لم تُبلّغ بعد",
+ p_areas:"التوزيع حسب المنطقة", p_log:"آخر التسجيلات",
+ search_ph:"بحث بالشركة…", all_areas:"كل المناطق", select_company:"اختر الشركة", other_company:"شركة أخرى / إضافة",
+ k_total:"الإجمالي في الموقع", k_reported:"شركات بلّغت", k_missing:"شركات لم تبلّغ", k_updated:"آخر تحديث",
+ th_company:"الشركة", th_day:"نهار", th_night:"ليل", th_total:"الإجمالي", th_area:"المنطقة",
+ th_person:"المسؤول", th_badge:"البادج", th_time:"الوقت", th_shift:"الوردية", th_count:"العدد", th_date:"التاريخ",
+ err_company:"اختر الشركة.", err_count:"أدخل عدد صحيح.", err_person:"اكتب اسم المسؤول.", err_badge:"اكتب رقم البادج.",
+ err_locked:"هذه الشركة سجّلت هذه الوردية باسم {p}. أدخل نفس رقم البادج للتعديل.",
+ ok_new:"تم التسجيل — {c} في وردية {s}. الرقم المرجعي {r}.",
+ ok_upd:"تم التحديث — العدد الآن {c} بدل {o}.",
+ queued:"لا يوجد اتصال. حُفظ الحصر وسيُرسل تلقائياً.",
+ pin_err:"رمز غير صحيح.", none_yet:"لا يوجد أي تسجيل لهذا اليوم بعد.",
+ all_reported:"كل الشركات بلّغت. لا يوجد نواقص.", of_total:"من {n} شركة",
+ sync_pending:"{n} بانتظار الإرسال", dayNow:"وردية النهار", nightNow:"وردية الليل",
+ rep_eyebrow:"Daily report", rep_title:"التقرير اليومي",
+ rep_h:"تقرير الحصر اليومي", rep_phase:"المرحلة", rep_prep:"أُعدّ في", rep_sig1:"مُعدّ التقرير",
+ rep_sig2:"مدير الإيقاف الشامل", rep_missing:"شركات لم تُبلّغ", copied:"تم النسخ."
+},
+en:{
+ brand:"Jazan Refinery", brand_sub:"Turnaround 2026",
+ nav_home:"Overview", nav_headcount:"Headcount", nav_report:"Daily report",
+ hero_eyebrow:"Mega shutdown · turnaround 2026",
+ hero_title:"Jazan Refinery mega shutdown tracker",
+ hero_lead:"One place for the site's daily numbers: who is on site, which phase the shutdown is in, and how the work is moving — without waiting for end-of-day reports.",
+ sec_modules:"Tracking sections", lg_plan:"Planned manpower",
+ b_phase:"Current phase", b_day:"Day", b_left:"Remaining", b_elapsed:"Elapsed",
+ b_of:"of", days:"days", before_start:"Not started", finished:"Complete",
+ t_onsite:"On site now", t_plan:"vs plan", t_reported:"Companies reported", t_safe:"Days without incident",
+ t_manhours:"Million manhours", t_missing:"Not reported",
+ mod_open:"Open", badge_live:"Live", badge_soon:"Soon",
+ tab_submit:"Submit headcount", tab_dash:"Dashboard",
+ brief_eyebrow:"Headcount", brief_title:"How many people are on site right now?",
+ brief_desc:"Log the headcount physically present for your shift. If the number changes, submit again with the same badge number and it updates instantly.",
+ form_head:"Headcount entry", f_shift:"Shift", s_day:"Day", s_night:"Night",
+ f_count:"People currently on site", h_count:"The number physically present on site — not planned manpower.",
+ f_company:"Company", f_other:"Company name", f_area:"Main working area",
+ f_person:"Responsible person", f_badge:"Badge number",
+ f_area_other:"Type the location / area", other_area:"Other — type it",
+ h_area_other:"e.g. Block #3 · Decontamination 45 · Crude Oil Tank 106",
+ err_area:"Pick a working area or type it.",
+ h_badge:"Your badge number protects this entry — only the same number can change it.",
+ f_date:"Shift date", btn_submit:"Submit headcount",
+ fn1:"Entries go straight to the management dashboard and are not visible to other contractors.",
+ fn2:"If signal is weak on site, the entry is saved on your device and sent automatically when you reconnect.",
+ fn3:"One entry per company per shift — a second submission updates the first instead of stacking on it.",
+ gate_title:"Management dashboard", gate_desc:"Enter the access code to view headcount figures.", gate_btn:"Enter",
+ dash_eyebrow:"Live headcount", dash_title:"Contractor headcount",
+ btn_export:"Export to Excel", btn_refresh:"Refresh", btn_print:"Print / PDF", btn_copy:"Copy as text",
+ p_companies:"Headcount by company", p_trend:"Last 14 days", p_missing:"Not reported yet",
+ p_areas:"Split by area", p_log:"Latest entries",
+ search_ph:"Search company…", all_areas:"All areas", select_company:"Select company", other_company:"Other / add company",
+ k_total:"Total on site", k_reported:"Companies reported", k_missing:"Not reported", k_updated:"Last update",
+ th_company:"Company", th_day:"Day", th_night:"Night", th_total:"Total", th_area:"Area",
+ th_person:"Responsible", th_badge:"Badge", th_time:"Time", th_shift:"Shift", th_count:"Count", th_date:"Date",
+ err_company:"Select a company.", err_count:"Enter a valid number.", err_person:"Enter the responsible person.", err_badge:"Enter the badge number.",
+ err_locked:"This company already reported this shift under {p}. Enter the same badge number to update it.",
+ ok_new:"Recorded — {c} on {s} shift. Reference {r}.",
+ ok_upd:"Updated — headcount is now {c}, was {o}.",
+ queued:"No connection. Saved and will be sent automatically.",
+ pin_err:"Wrong code.", none_yet:"No entries for this day yet.",
+ all_reported:"Every company has reported. Nothing outstanding.", of_total:"of {n} companies",
+ sync_pending:"{n} waiting to send", dayNow:"Day shift", nightNow:"Night shift",
+ rep_eyebrow:"Daily report", rep_title:"Daily report",
+ rep_h:"Daily headcount report", rep_phase:"Phase", rep_prep:"Generated", rep_sig1:"Prepared by",
+ rep_sig2:"Turnaround manager", rep_missing:"Companies not reported", copied:"Copied."
+}};
+let LANG = "ar";
+const t = (k,v={}) => (I18N[LANG][k]||k).replace(/\{(\w+)\}/g,(_,g)=>v[g]??"");
+
+/* ==========================================================
+   3) Storage
+   ========================================================== */
+const Store = (()=>{
+  const mem = new Map();
+  const hasW = typeof window!=="undefined" && window.storage && typeof window.storage.get==="function";
+  let hasLS=false; try{localStorage.setItem("__t","1");localStorage.removeItem("__t");hasLS=true;}catch(e){}
+  return {
+    async get(k){
+      if(hasW){ try{const r=await window.storage.get(k); if(r&&r.value) return JSON.parse(r.value);}catch(e){} }
+      if(hasLS){ try{const v=localStorage.getItem(k); if(v) return JSON.parse(v);}catch(e){} }
+      return mem.has(k)?mem.get(k):null;
+    },
+    async set(k,v){
+      mem.set(k,v); const s=JSON.stringify(v);
+      if(hasW){ try{await window.storage.set(k,s); return;}catch(e){} }
+      if(hasLS){ try{localStorage.setItem(k,s);}catch(e){} }
+    }
+  };
+})();
+const K_REC="jzrc:records", K_PEND="jzrc:pending", K_AUTH="jzrc:auth", K_THEME="jzrc:theme", K_LANG="jzrc:lang", K_SEED="jzrc:seeded";
+
+/* ==========================================================
+   4) Time
+   ========================================================== */
+const pad=n=>String(n).padStart(2,"0");
+const $=id=>document.getElementById(id);
+function meccaParts(d=new Date()){
+  const f=new Intl.DateTimeFormat("en-CA",{timeZone:CONFIG.tz,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false});
+  const p=Object.fromEntries(f.formatToParts(d).map(x=>[x.type,x.value]));
+  return {date:`${p.year}-${p.month}-${p.day}`,hour:+p.hour%24,minute:+p.minute};
+}
+const todayKSA=()=>meccaParts().date;
+const currentShift=()=>{const h=meccaParts().hour; return (h>=CONFIG.dayStart&&h<CONFIG.nightStart)?"day":"night";};
+const D=iso=>new Date(iso+"T12:00:00Z");
+const dayDiff=(a,b)=>Math.round((D(b)-D(a))/864e5);
+const addDays=(iso,n)=>{const d=D(iso); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10);};
+function fmtDate(iso){
+  if(!iso) return "—";
+  return new Intl.DateTimeFormat(LANG==="ar"?"ar-SA-u-ca-gregory-nu-latn":"en-GB",
+    {weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(D(iso));
+}
+const fmtTime=ms=>ms?new Intl.DateTimeFormat("en-GB",{timeZone:CONFIG.tz,hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(ms)):"—";
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nf=n=>Number(n||0).toLocaleString("en-US");
+
+/* ==========================================================
+   5) Data
+   ========================================================== */
+let RECORDS=[], PENDING=[];
+async function apiGet(){
+  if(!CONFIG.apiUrl) return null;
+  const r=await fetch(CONFIG.apiUrl+"?action=list");
+  if(!r.ok) throw new Error("http "+r.status);
+  const j=await r.json();
+  return Array.isArray(j.records)?j.records:[];
+}
+async function apiPut(rec){
+  if(!CONFIG.apiUrl) return {ok:true,local:true};
+  const r=await fetch(CONFIG.apiUrl,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"upsert",record:rec})});
+  if(!r.ok) throw new Error("http "+r.status);
+  return r.json();
+}
+async function loadAll(){
+  RECORDS=(await Store.get(K_REC))||[];
+  PENDING=(await Store.get(K_PEND))||[];
+  if(CONFIG.apiUrl){ try{const rm=await apiGet(); if(rm){RECORDS=rm; await Store.set(K_REC,RECORDS);} }catch(e){} }
+  await flushPending(); renderSync();
+}
+async function flushPending(){
+  if(!PENDING.length||!CONFIG.apiUrl) return;
+  const left=[];
+  for(const r of PENDING){ try{ await apiPut(r); }catch(e){ left.push(r); } }
+  PENDING=left; await Store.set(K_PEND,PENDING);
+}
+const findRecord=(d,s,c)=>RECORDS.find(r=>r.date===d&&r.shift===s&&r.company===c);
+function localUpsert(rec){
+  const i=RECORDS.findIndex(r=>r.date===rec.date&&r.shift===rec.shift&&r.company===rec.company);
+  if(i>-1) RECORDS[i]={...RECORDS[i],...rec}; else RECORDS.push(rec);
+}
+const refCode=()=>Math.random().toString(36).slice(2,7).toUpperCase();
+function totalsFor(date){
+  const rs=RECORDS.filter(r=>r.date===date);
+  return {
+    day:rs.filter(r=>r.shift==="day").reduce((s,r)=>s+r.count,0),
+    night:rs.filter(r=>r.shift==="night").reduce((s,r)=>s+r.count,0),
+    companies:new Set(rs.map(r=>r.company)).size,
+    rows:rs
+  };
+}
+
+/* كل المناطق المعروفة: قائمة CONFIG + أي منطقة كتبها مقاول يدوياً */
+function areaOptions(){
+  const set=new Set(CONFIG.areas);
+  RECORDS.forEach(r=>{ if(r.area) set.add(r.area); });
+  return [...set];
+}
+
+/* إدخال بيانات يوم واحد مسبقاً — يُنفَّذ مرة واحدة فقط */
+async function applySeed(){
+  const s=CONFIG.seed;
+  if(!s||!Array.isArray(s.rows)||!s.rows.length) return;
+  if(await Store.get(K_SEED)) return;
+  const stamp=Date.parse(s.date+"T18:00:00+03:00");
+  const added=[];
+  s.rows.forEach(([company,night,day,area])=>{
+    [["night",night],["day",day]].forEach(([shift,count])=>{
+      if(findRecord(s.date,shift,company)) return;
+      const rec={id:s.date+"-"+shift+"-"+company, ref:"SEED", date:s.date, shift, company,
+        area:area||"", count:Number(count)||0, person:s.person, badge:String(s.badge),
+        createdAt:stamp, updatedAt:stamp};
+      RECORDS.push(rec); added.push(rec);
+    });
+  });
+  if(!added.length) return;
+  await Store.set(K_REC,RECORDS);
+  await Store.set(K_SEED,true);
+  if(CONFIG.apiUrl){ for(const r of added){ try{ await apiPut(r); }catch(e){} } }
+}
+
+/* ==========================================================
+   6) Shutdown plan helpers
+   ========================================================== */
+function phaseList(){
+  const ph=CONFIG.shutdown.phases;
+  return ph.map((p,i)=>({...p, end: i<ph.length-1 ? addDays(ph[i+1].start,-1) : CONFIG.shutdown.end}));
+}
+function currentPhase(date){
+  const list=phaseList();
+  for(const p of list){ if(date>=p.start && date<=p.end) return p; }
+  return null;
+}
+function plannedOn(date){
+  const p=currentPhase(date);
+  return p?p.planned:0;
+}
+
+/* ==========================================================
+   7) HOME
+   ========================================================== */
+function renderHome(){
+  const today=todayKSA();
+  const sd=CONFIG.shutdown;
+  const total=dayDiff(sd.start,sd.end)+1;
+  const elapsed=Math.min(Math.max(dayDiff(sd.start,today)+1,0),total);
+  const left=Math.max(total-elapsed,0);
+  const ph=currentPhase(today);
+  const phaseLabel = ph ? (LANG==="ar"?ph.ar:ph.en) : (today<sd.start ? t("before_start") : t("finished"));
+
+  /* sky follows the shift that is actually running right now */
+  $("sky").setAttribute("data-shift", currentShift());
+  $("skyCaption").innerHTML=`
+    <div class="ph">${esc(phaseLabel)}</div>
+    <div class="mt">${sd.code} · ${t("b_day")} ${elapsed}/${total} · ${t("b_left")} ${left} ${t("days")}</div>`;
+
+  const mark=$("todayMark");
+  if(today>=sd.start&&today<=sd.end){
+    mark.hidden=false;
+    mark.style.left=(dayDiff(sd.start,today)/Math.max(total-1,1)*100)+"%";
+  } else mark.hidden=true;
+
+  $("bandHead").innerHTML=`
+    <div class="band-stat"><span class="eyebrow">${t("b_day")}</span><span class="v">${elapsed} <span style="font-size:13px;color:var(--ink-3)">${t("b_of")} ${total}</span></span></div>
+    <div class="band-stat"><span class="eyebrow">${t("b_left")}</span><span class="v">${left} <span style="font-size:13px;color:var(--ink-3)">${t("days")}</span></span></div>
+    <div class="band-stat push"><span class="eyebrow">${sd.start} → ${sd.end}</span><span class="v">${Math.round(elapsed/total*100)}%</span></div>`;
+
+  /* phase band, widths proportional to duration */
+  const list=phaseList();
+  $("phases").innerHTML=list.map(p=>{
+    const len=dayDiff(p.start,p.end)+1;
+    const state = (today>=p.start&&today<=p.end)?"now":(today>p.end?"done":"");
+    const label=LANG==="ar"?p.ar:p.en;
+    return `<div class="phase ${state}" style="flex:${len} 1 0" title="${p.start} → ${p.end}">
+      ${esc(label)}<small>${len} ${t("days")}</small></div>`;
+  }).join("");
+
+  /* manpower curve: planned step line + actual stacked bars */
+  const W=1000,H=170,pt=10,pb=18,pl=42;
+  const plot=W-pl-8, ih=H-pt-pb;
+  const maxPlan=Math.max(...list.map(p=>p.planned),1);
+  let maxAct=1;
+  for(let i=0;i<total;i++){const d=addDays(sd.start,i);const x=totalsFor(d);maxAct=Math.max(maxAct,x.day+x.night);}
+  const max=Math.max(maxPlan,maxAct)*1.08;
+  const X=i=>pl+plot*(i/Math.max(total-1,1));
+  const Y=v=>pt+ih*(1-v/max);
+  const bw=Math.max(1.5,plot/total*0.62);
+
+  let planPts="", bars="";
+  for(let i=0;i<total;i++){
+    const d=addDays(sd.start,i), x=X(i);
+    planPts+=`${x},${Y(plannedOn(d))} `;
+    const tt=totalsFor(d), sum=tt.day+tt.night;
+    if(sum>0){
+      const hN=ih*(tt.night/max), hD=ih*(tt.day/max);
+      const yN=Y(tt.night), yD=Y(sum);
+      bars+=`<rect x="${x-bw/2}" y="${yN}" width="${bw}" height="${Math.max(0,hN)}" fill="var(--night-fill)"><title>${d} · ${t("s_night")} ${tt.night}</title></rect>`;
+      bars+=`<rect x="${x-bw/2}" y="${yD}" width="${bw}" height="${Math.max(0,hD)}" fill="var(--day-fill)"><title>${d} · ${t("s_day")} ${tt.day}</title></rect>`;
+    }
+  }
+  const grid=[0,.5,1].map(f=>{const v=Math.round(max*f),y=Y(v);
+    return `<line x1="${pl}" x2="${W-8}" y1="${y}" y2="${y}" stroke="var(--line)"/>
+            <text x="${pl-7}" y="${y+4}" text-anchor="end" fill="var(--ink-3)" font-size="10" font-family="IBM Plex Mono">${nf(v)}</text>`;}).join("");
+  const ti=Math.min(Math.max(dayDiff(sd.start,today),0),total-1);
+  const todayMark = (today>=sd.start&&today<=sd.end)
+    ? `<line x1="${X(ti)}" x2="${X(ti)}" y1="${pt}" y2="${pt+ih}" stroke="var(--alarm)" stroke-width="1.5" stroke-dasharray="3 3"/>` : "";
+  $("curve").innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" dir="ltr" role="img">
+    ${grid}${bars}
+    <polyline points="${planPts}" fill="none" stroke="var(--line-strong)" stroke-width="2" stroke-linejoin="round"/>
+    ${todayMark}</svg>`;
+
+  /* tiles */
+  const tt=totalsFor(today), onsite=tt.day+tt.night, plan=plannedOn(today);
+  const safeDays=Math.max(dayDiff(CONFIG.hse.lastIncident,today),0);
+  const missing=CONFIG.companies.length-tt.companies;
+  const pct=plan?Math.round(onsite/plan*100):0;
+  $("homeTiles").innerHTML=`
+    <div class="tile"><span class="eyebrow">${t("t_onsite")}</span><div class="v">${nf(onsite)}</div><div class="d">${t("s_day")} ${nf(tt.day)} · ${t("s_night")} ${nf(tt.night)}</div></div>
+    <div class="tile ${!plan?"":(pct>=90?"ok":"alarm")}"><span class="eyebrow">${t("t_plan")}</span><div class="v">${plan?pct+"%":"—"}</div><div class="d">${t("lg_plan")} ${plan?nf(plan):"—"}</div></div>
+    <div class="tile ok"><span class="eyebrow">${t("t_reported")}</span><div class="v">${tt.companies}</div><div class="d">${t("of_total",{n:CONFIG.companies.length})}</div></div>
+    <div class="tile ${missing?"alarm":"ok"}"><span class="eyebrow">${t("t_missing")}</span><div class="v">${missing}</div><div class="d">${fmtDate(today)}</div></div>
+    <div class="tile ok"><span class="eyebrow">${t("t_safe")}</span><div class="v">${safeDays}</div><div class="d">${CONFIG.hse.lastIncident}</div></div>
+    <div class="tile"><span class="eyebrow">${t("t_manhours")}</span><div class="v">${CONFIG.hse.manhoursMillions}</div><div class="d">${sd.code}</div></div>`;
+
+  /* modules */
+  const live=CONFIG.modules.filter(m=>m.live).length;
+  $("modCount").textContent=`${live}/${CONFIG.modules.length}`;
+  $("mods").innerHTML=CONFIG.modules.map(m=>`
+    <button class="mod ${m.live?"is-live":""}" data-mod="${m.id}" ${m.live?"":"disabled"}>
+      <span class="badge ${m.live?"live":"soon"}">${m.live?t("badge_live"):t("badge_soon")}</span>
+      <h3>${LANG==="ar"?m.ar:m.en}</h3>
+      <p>${LANG==="ar"?m.ar_d:m.en_d}</p>
+    </button>`).join("");
+  $("mods").querySelectorAll(".mod[data-mod]").forEach(b=>{
+    if(!b.disabled) b.onclick=()=>goto(b.dataset.mod);
+  });
+}
+
+/* ==========================================================
+   8) Headcount — submit
+   ========================================================== */
+let SHIFT=currentShift();
+function fillSelect(el,items,ph,extra){
+  el.innerHTML="";
+  if(ph!=null){const o=document.createElement("option");o.value="";o.textContent=ph;el.appendChild(o);}
+  items.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;el.appendChild(o);});
+  if(extra){const o=document.createElement("option");o.value="__other";o.textContent=extra;el.appendChild(o);}
+}
+function paintShift(){
+  document.querySelectorAll(".shift-opt").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.shift===SHIFT)));
+}
+const msg=(el,kind,text)=>{el.innerHTML=`<div class="notice ${kind}">${text}</div>`;};
+
+async function submitHeadcount(){
+  const box=$("formMsg");
+  let company=$("f_company").value;
+  if(company==="__other") company=$("f_other").value.trim();
+  const count=parseInt($("f_count").value,10);
+  const person=$("f_person").value.trim();
+  const badge=$("f_badge").value.trim();
+  let area=$("f_area").value;
+  if(area==="__other") area=$("f_area_other").value.trim();
+  const date=$("f_date").value||todayKSA();
+
+  if(!company) return msg(box,"err",t("err_company"));
+  if(!Number.isFinite(count)||count<0) return msg(box,"err",t("err_count"));
+  if($("f_area").value==="__other" && !area) return msg(box,"err",t("err_area"));
+  if(!person) return msg(box,"err",t("err_person"));
+  if(!badge) return msg(box,"err",t("err_badge"));
+
+  const ex=findRecord(date,SHIFT,company);
+  if(ex && String(ex.badge)!==badge) return msg(box,"warn",t("err_locked",{p:ex.person}));
+
+  const rec={
+    id: ex?ex.id:(Date.now().toString(36)+refCode()),
+    ref: ex?ex.ref:refCode(),
+    date, shift:SHIFT, company, area, count, person, badge,
+    createdAt: ex?ex.createdAt:Date.now(), updatedAt:Date.now()
+  };
+  const old=ex?ex.count:null;
+
+  $("submitBtn").disabled=true;
+  localUpsert(rec); await Store.set(K_REC,RECORDS);
+  let queued=false;
+  if(CONFIG.apiUrl){ try{await apiPut(rec);}catch(e){PENDING.push(rec); await Store.set(K_PEND,PENDING); queued=true;} }
+  $("submitBtn").disabled=false; renderSync();
+
+  const label=SHIFT==="day"?t("s_day"):t("s_night");
+  if(queued) msg(box,"warn",t("queued"));
+  else if(ex) msg(box,"ok",t("ok_upd",{c:count,o:old}));
+  else msg(box,"ok",t("ok_new",{c:count,s:label,r:rec.ref}));
+
+  if(!$("dash").hidden) renderDash();
+  renderHome(); renderReport();
+}
+
+/* ==========================================================
+   9) Headcount — dashboard
+   ========================================================== */
+let SORT={key:"total",dir:-1};
+function dayRecords(date){
+  const area=$("d_area").value, q=$("d_search").value.trim().toLowerCase();
+  return RECORDS.filter(r=>r.date===date&&(!area||r.area===area)&&(!q||r.company.toLowerCase().includes(q)));
+}
+function renderDash(){
+  const keep=$("d_area").value;
+  fillSelect($("d_area"),areaOptions(),t("all_areas"));
+  $("d_area").value=[...$("d_area").options].some(o=>o.value===keep)?keep:"";
+  const date=$("d_date").value||todayKSA();
+  const rows=dayRecords(date);
+  const day=rows.filter(r=>r.shift==="day").reduce((s,r)=>s+r.count,0);
+  const night=rows.filter(r=>r.shift==="night").reduce((s,r)=>s+r.count,0);
+  const total=day+night;
+
+  const track=$("gaugeTrack");
+  if(!total){
+    track.innerHTML=`<div class="gauge-seg empty" style="flex:1 1 100%">${t("none_yet")}</div>`;
+  }else{
+    let dp=day/total*100; if(day&&dp<18)dp=18; if(!day)dp=0; if(!night)dp=100;
+    track.innerHTML=`
+      <div class="gauge-seg day" style="flex:0 0 ${dp}%"><span class="lab">☀ ${t("s_day")}</span><span class="val">${nf(day)}</span><span class="sub">${Math.round(day/total*100)}%</span></div>
+      <div class="gauge-seg night" style="flex:0 0 ${100-dp}%"><span class="lab">☾ ${t("s_night")}</span><span class="val">${nf(night)}</span><span class="sub">${Math.round(night/total*100)}%</span></div>`;
+  }
+  const lastUpd=rows.length?Math.max(...rows.map(r=>r.updatedAt||0)):0;
+  $("gaugeFoot").innerHTML=`<span>${fmtDate(date)}</span><span>${t("k_total")}: <b>${nf(total)}</b></span><span>${t("k_updated")}: <b>${fmtTime(lastUpd)}</b></span>`;
+
+  const byCo={};
+  rows.forEach(r=>{
+    const c=byCo[r.company]||(byCo[r.company]={company:r.company,day:0,night:0,total:0,area:r.area,person:r.person,badge:r.badge,updatedAt:0});
+    c[r.shift]+=r.count; c.total+=r.count;
+    if((r.updatedAt||0)>c.updatedAt){c.updatedAt=r.updatedAt;c.area=r.area;c.person=r.person;c.badge=r.badge;}
+  });
+  const cos=Object.values(byCo);
+  const missing=CONFIG.companies.filter(c=>!byCo[c]);
+
+  $("kpis").innerHTML=`
+    <div class="tile"><span class="eyebrow">${t("k_total")}</span><div class="v">${nf(total)}</div><div class="d">${t("s_day")} ${nf(day)} · ${t("s_night")} ${nf(night)}</div></div>
+    <div class="tile ok"><span class="eyebrow">${t("k_reported")}</span><div class="v">${cos.length}</div><div class="d">${t("of_total",{n:CONFIG.companies.length})}</div></div>
+    <div class="tile ${missing.length?"alarm":"ok"}"><span class="eyebrow">${t("k_missing")}</span><div class="v">${missing.length}</div><div class="d">${Math.round(cos.length/CONFIG.companies.length*100)}%</div></div>
+    <div class="tile"><span class="eyebrow">${t("k_updated")}</span><div class="v">${fmtTime(lastUpd)}</div><div class="d">${CONFIG.tz.split("/")[1]}</div></div>`;
+
+  cos.sort((a,b)=>{const k=SORT.key,x=a[k],y=b[k];
+    return typeof x==="string" ? x.localeCompare(y)*SORT.dir*-1 : (x-y)*SORT.dir*-1;});
+  const th=(k,l,cls="")=>`<th data-sort="${k}" class="${cls}">${l}${SORT.key===k?(SORT.dir===1?" ↑":" ↓"):""}</th>`;
+  $("coCount").textContent=`${cos.length}/${CONFIG.companies.length}`;
+  $("tblCompanies").innerHTML=cos.length?`
+    <thead><tr>${th("company",t("th_company"))}${th("day",t("th_day"),"n")}${th("night",t("th_night"),"n")}${th("total",t("th_total"),"n")}<th>${t("th_area")}</th>${th("updatedAt",t("th_time"),"n")}</tr></thead>
+    <tbody>${cos.map(c=>`<tr>
+      <td>${esc(c.company)}<div style="font-size:11.5px;color:var(--ink-3)">${esc(c.person)} · <span class="num">${esc(c.badge)}</span></div></td>
+      <td class="n" style="color:var(--day)">${c.day||"–"}</td>
+      <td class="n" style="color:var(--night)">${c.night||"–"}</td>
+      <td class="n" style="font-weight:600">${c.total}</td>
+      <td style="font-size:12.5px;color:var(--ink-3)">${esc(c.area||"—")}</td>
+      <td class="n">${fmtTime(c.updatedAt)}</td></tr>`).join("")}</tbody>`
+    :`<tbody><tr><td class="empty-state">${t("none_yet")}</td></tr></tbody>`;
+  $("tblCompanies").querySelectorAll("th[data-sort]").forEach(el=>{
+    el.onclick=()=>{const k=el.dataset.sort; SORT={key:k,dir:SORT.key===k?-SORT.dir:-1}; renderDash();};
+  });
+
+  $("missingCount").textContent=`${missing.length}/${CONFIG.companies.length}`;
+  $("missingChips").innerHTML=missing.length?missing.map(c=>`<span class="chip missing">${esc(c)}</span>`).join("")
+    :`<p class="hint" style="margin:2px 0">${t("all_reported")}</p>`;
+
+  const byArea={};
+  rows.forEach(r=>{const a=byArea[r.area||"—"]||(byArea[r.area||"—"]={day:0,night:0}); a[r.shift]+=r.count;});
+  const am=Math.max(1,...Object.values(byArea).map(a=>a.day+a.night));
+  $("areaBars").innerHTML=Object.keys(byArea).length?Object.entries(byArea)
+    .sort((a,b)=>(b[1].day+b[1].night)-(a[1].day+a[1].night))
+    .map(([a,v])=>`<div class="bar-row"><span>${esc(a)}</span><span class="num muted">${v.day+v.night}</span>
+      <span class="bar-track"><i class="day" style="width:${v.day/am*100}%"></i><i class="night" style="width:${v.night/am*100}%"></i></span></div>`).join("")
+    :`<p class="hint">${t("none_yet")}</p>`;
+
+  const log=[...rows].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).slice(0,40);
+  $("tblLog").innerHTML=log.length?`
+    <thead><tr><th>${t("th_company")}</th><th>${t("th_shift")}</th><th class="n">${t("th_count")}</th><th class="n">${t("th_time")}</th></tr></thead>
+    <tbody>${log.map(r=>`<tr><td style="font-size:12.5px">${esc(r.company)}</td>
+      <td><span class="tag ${r.shift}">${r.shift==="day"?t("s_day"):t("s_night")}</span></td>
+      <td class="n">${r.count}</td><td class="n" style="font-size:12px">${fmtTime(r.updatedAt)}</td></tr>`).join("")}</tbody>`
+    :`<tbody><tr><td class="empty-state">${t("none_yet")}</td></tr></tbody>`;
+
+  renderTrend(date);
+}
+function renderTrend(anchor){
+  const days=[];
+  for(let i=13;i>=0;i--){
+    const iso=addDays(anchor,-i), tt=totalsFor(iso);
+    days.push({iso,label:iso.slice(8),day:tt.day,night:tt.night});
+  }
+  const max=Math.max(1,...days.map(d=>Math.max(d.day,d.night)));
+  const W=700,H=190,pl=38,pb=22,pt=8, ih=H-pt-pb;
+  const bw=(W-pl-10)/days.length, gap=bw*.16, cw=(bw-gap*2)/2;
+  const Y=v=>pt+ih*(1-v/max);
+  const grid=[0,.5,1].map(f=>{const v=Math.round(max*f),y=Y(v);
+    return `<line x1="${pl}" x2="${W-6}" y1="${y}" y2="${y}" stroke="var(--line)"/>
+      <text x="${pl-6}" y="${y+4}" text-anchor="end" fill="var(--ink-3)" font-size="10" font-family="IBM Plex Mono">${v}</text>`;}).join("");
+  const bars=days.map((d,i)=>{const x0=pl+i*bw+gap;
+    return `<rect x="${x0}" y="${Y(d.day)}" width="${cw}" height="${Math.max(0,ih*d.day/max)}" fill="var(--day-fill)" rx="1"><title>${d.iso} · ${d.day}</title></rect>
+      <rect x="${x0+cw+2}" y="${Y(d.night)}" width="${cw}" height="${Math.max(0,ih*d.night/max)}" fill="var(--night-fill)" rx="1"><title>${d.iso} · ${d.night}</title></rect>
+      <text x="${x0+cw}" y="${H-7}" text-anchor="middle" fill="${d.iso===anchor?"var(--day)":"var(--ink-3)"}" font-size="10" font-family="IBM Plex Mono">${d.label}</text>`;}).join("");
+  $("trendWrap").innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" dir="ltr" role="img">${grid}${bars}</svg>`;
+}
+function exportCSV(){
+  const date=$("d_date").value||todayKSA();
+  const rows=dayRecords(date).sort((a,b)=>a.company.localeCompare(b.company)||a.shift.localeCompare(b.shift));
+  const head=[t("th_date"),t("th_shift"),t("th_company"),t("th_area"),t("th_count"),t("th_person"),t("th_badge"),t("th_time")];
+  const body=rows.map(r=>[r.date,r.shift==="day"?t("s_day"):t("s_night"),r.company,r.area,r.count,r.person,r.badge,fmtTime(r.updatedAt)]);
+  const day=rows.filter(r=>r.shift==="day").reduce((s,r)=>s+r.count,0);
+  const night=rows.filter(r=>r.shift==="night").reduce((s,r)=>s+r.count,0);
+  body.push([],["",t("s_day"),day],["",t("s_night"),night],["",t("th_total"),day+night]);
+  const csv=[head,...body].map(r=>r.map(c=>{const s=String(c??""); return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s;}).join(",")).join("\r\n");
+  const b=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(b);
+  a.download=`JZRC-TRS2026-headcount-${date}.csv`; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ==========================================================
+   10) Daily report
+   ========================================================== */
+function renderReport(){
+  const date=$("r_date").value||todayKSA();
+  const tt=totalsFor(date), total=tt.day+tt.night;
+  const ph=currentPhase(date), phLabel=ph?(LANG==="ar"?ph.ar:ph.en):"—";
+  const plan=plannedOn(date);
+  const byCo={};
+  tt.rows.forEach(r=>{const c=byCo[r.company]||(byCo[r.company]={day:0,night:0,area:r.area}); c[r.shift]+=r.count;});
+  const missing=CONFIG.companies.filter(c=>!byCo[c]);
+  const cos=Object.entries(byCo).sort((a,b)=>(b[1].day+b[1].night)-(a[1].day+a[1].night));
+
+  $("reportBody").innerHTML=`
+    <p class="eyebrow">${CONFIG.shutdown.code} · ${t("brand")}</p>
+    <h2>${t("rep_h")}</h2>
+    <p class="muted" style="font-size:13.5px">${fmtDate(date)} · ${t("rep_phase")}: ${esc(phLabel)}</p>
+    <div class="rep-grid">
+      <div class="rep-cell"><span class="eyebrow">${t("s_day")}</span><div class="v" style="color:var(--day)">${nf(tt.day)}</div></div>
+      <div class="rep-cell"><span class="eyebrow">${t("s_night")}</span><div class="v" style="color:var(--night)">${nf(tt.night)}</div></div>
+      <div class="rep-cell"><span class="eyebrow">${t("k_total")}</span><div class="v">${nf(total)}</div></div>
+      <div class="rep-cell"><span class="eyebrow">${t("lg_plan")}</span><div class="v" style="color:var(--ink-3)">${nf(plan)}</div></div>
+      <div class="rep-cell"><span class="eyebrow">${t("k_reported")}</span><div class="v">${cos.length}<span style="font-size:14px;color:var(--ink-3)">/${CONFIG.companies.length}</span></div></div>
+    </div>
+    ${cos.length?`<table><thead><tr><th>${t("th_company")}</th><th class="n">${t("th_day")}</th><th class="n">${t("th_night")}</th><th class="n">${t("th_total")}</th><th>${t("th_area")}</th></tr></thead>
+      <tbody>${cos.map(([c,v])=>`<tr><td>${esc(c)}</td><td class="n">${v.day||"–"}</td><td class="n">${v.night||"–"}</td>
+        <td class="n" style="font-weight:600">${v.day+v.night}</td><td style="font-size:12.5px;color:var(--ink-3)">${esc(v.area||"—")}</td></tr>`).join("")}
+      <tr><td style="font-weight:600">${t("th_total")}</td><td class="n" style="font-weight:600">${nf(tt.day)}</td>
+      <td class="n" style="font-weight:600">${nf(tt.night)}</td><td class="n" style="font-weight:600">${nf(total)}</td><td></td></tr></tbody></table>`
+      :`<p class="empty-state">${t("none_yet")}</p>`}
+    ${missing.length?`<p class="eyebrow" style="margin-top:22px">${t("rep_missing")} — ${missing.length}</p>
+      <div class="chips" style="margin-top:8px">${missing.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div>`:""}
+    <div class="sig"><div>${t("rep_sig1")}</div><div>${t("rep_sig2")}</div></div>
+    <p class="eyebrow" style="margin-top:20px">${t("rep_prep")} ${fmtTime(Date.now())} · ${CONFIG.tz}</p>`;
+}
+function reportText(){
+  const date=$("r_date").value||todayKSA(), tt=totalsFor(date);
+  const ph=currentPhase(date), phLabel=ph?(LANG==="ar"?ph.ar:ph.en):"—";
+  const byCo={};
+  tt.rows.forEach(r=>{const c=byCo[r.company]||(byCo[r.company]={day:0,night:0}); c[r.shift]+=r.count;});
+  const lines=[
+    `${t("rep_h")} — ${CONFIG.shutdown.code}`,
+    `${fmtDate(date)} · ${t("rep_phase")}: ${phLabel}`,
+    `${t("s_day")}: ${tt.day} | ${t("s_night")}: ${tt.night} | ${t("k_total")}: ${tt.day+tt.night}`,
+    `${t("k_reported")}: ${Object.keys(byCo).length}/${CONFIG.companies.length}`,"",
+    ...Object.entries(byCo).sort((a,b)=>(b[1].day+b[1].night)-(a[1].day+a[1].night))
+      .map(([c,v])=>`${c}: ${t("s_day")} ${v.day} / ${t("s_night")} ${v.night} = ${v.day+v.night}`)
+  ];
+  return lines.join("\n");
+}
+
+/* ==========================================================
+   11) Shell
+   ========================================================== */
+function goto(page){
+  document.querySelectorAll("[data-page]").forEach(b=>b.setAttribute("aria-current",String(b.dataset.page===page)));
+  document.querySelectorAll(".page").forEach(s=>s.classList.toggle("active",s.id==="page-"+page));
+  window.scrollTo({top:0,behavior:"instant"});
+  if(page==="home") renderHome();
+  if(page==="report") renderReport();
+  if(page==="headcount" && !$("dash").hidden) renderDash();
+}
+function showSub(which){
+  $("st-submit").setAttribute("aria-selected",String(which==="submit"));
+  $("st-dash").setAttribute("aria-selected",String(which==="dash"));
+  $("hc-submit").hidden = which!=="submit";
+  $("hc-dash").hidden = which!=="dash";
+  if(which==="dash" && !$("dash").hidden) renderDash();
+}
+function tickClock(){
+  const p=meccaParts();
+  $("clock").textContent=`${pad(p.hour)}:${pad(p.minute)}`;
+  const s=currentShift(), pill=$("shiftPill");
+  pill.className="pill "+s;
+  pill.textContent=(s==="day"?"☀ ":"☾ ")+(s==="day"?t("dayNow"):t("nightNow"));
+  const sky=$("sky"); if(sky && sky.getAttribute("data-shift")!==s) sky.setAttribute("data-shift",s);
+  $("footStamp").textContent=todayKSA();
+}
+function renderSync(){
+  const b=$("syncBadge");
+  if(PENDING.length){b.hidden=false;b.textContent=t("sync_pending",{n:PENDING.length});}
+  else b.hidden=true;
+}
+function applyTheme(mode){
+  document.documentElement.setAttribute("data-theme",mode);
+  $("themeBtn").textContent = mode==="dark" ? "☀" : "🌙";
+  document.querySelector('meta[name=theme-color]').setAttribute("content", mode==="dark"?"#0F1317":"#F4F5F3");
+  if($("page-home").classList.contains("active")) renderHome();
+}
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+  $("langBtn").textContent=LANG==="ar"?"EN":"عربي";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n);});
+  $("d_search").placeholder=t("search_ph");
+  const co=$("f_company").value, ar=$("f_area").value, dar=$("d_area").value;
+  fillSelect($("f_company"),CONFIG.companies,t("select_company"),t("other_company")); $("f_company").value=co;
+  fillSelect($("f_area"),CONFIG.areas,"—",t("other_area")); $("f_area").value=ar;
+  $("areaOtherWrap").hidden = $("f_area").value!=="__other";
+  fillSelect($("d_area"),areaOptions(),t("all_areas")); $("d_area").value=dar;
+  $("formDate").textContent=fmtDate($("f_date").value||todayKSA());
+  tickClock(); renderHome(); renderReport();
+  if(!$("dash").hidden) renderDash();
+}
+
+async function init(){
+  const today=todayKSA();
+  $("f_date").value=today; $("d_date").value=today; $("r_date").value=today;
+
+  applyTheme((await Store.get(K_THEME))||"light");
+  LANG=(await Store.get(K_LANG))||"ar";
+  applyLang(); paintShift();
+
+  document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>goto(b.dataset.page));
+  $("brandLink").onclick=e=>{e.preventDefault();goto("home");};
+  $("st-submit").onclick=()=>showSub("submit");
+  $("st-dash").onclick=()=>showSub("dash");
+
+  $("themeBtn").onclick=async()=>{
+    const next=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
+    applyTheme(next); await Store.set(K_THEME,next);
+  };
+  $("langBtn").onclick=async()=>{LANG=LANG==="ar"?"en":"ar"; await Store.set(K_LANG,LANG); applyLang();};
+
+  document.querySelectorAll(".shift-opt").forEach(b=>b.onclick=()=>{SHIFT=b.dataset.shift;paintShift();});
+  $("plus").onclick=()=>$("f_count").value=Math.min(9999,(+$("f_count").value||0)+1);
+  $("minus").onclick=()=>$("f_count").value=Math.max(0,(+$("f_count").value||0)-1);
+  $("f_company").onchange=e=>$("otherWrap").hidden=e.target.value!=="__other";
+  $("f_area").onchange=e=>{
+    $("areaOtherWrap").hidden=e.target.value!=="__other";
+    if(e.target.value==="__other") $("f_area_other").focus();
+  };
+  $("f_date").onchange=()=>$("formDate").textContent=fmtDate($("f_date").value);
+  $("submitBtn").onclick=submitHeadcount;
+
+  $("pinBtn").onclick=async()=>{
+    if($("pin").value===CONFIG.pin){await Store.set(K_AUTH,true);$("gate").hidden=true;$("dash").hidden=false;renderDash();}
+    else msg($("pinMsg"),"err",t("pin_err"));
+  };
+  $("pin").onkeydown=e=>{if(e.key==="Enter")$("pinBtn").click();};
+  if(await Store.get(K_AUTH)){$("gate").hidden=true;$("dash").hidden=false;}
+
+  ["d_date","d_area"].forEach(id=>$(id).onchange=renderDash);
+  $("d_search").oninput=renderDash;
+  $("exportBtn").onclick=exportCSV;
+  $("refreshBtn").onclick=async()=>{await loadAll();renderDash();renderHome();};
+  $("r_date").onchange=renderReport;
+  $("repPrint").onclick=()=>window.print();
+  $("repCopy").onclick=async()=>{
+    try{await navigator.clipboard.writeText(reportText());alert(t("copied"));}catch(e){}
+  };
+
+  await loadAll();
+  await applySeed();
+  renderHome(); renderReport();
+  if(!$("dash").hidden) renderDash();
+
+  setInterval(tickClock,20000);
+  setInterval(async()=>{await loadAll(); if($("page-home").classList.contains("active"))renderHome();
+    if(!$("dash").hidden&&$("page-headcount").classList.contains("active"))renderDash();},60000);
+  window.addEventListener("online",async()=>{await flushPending();renderSync();});
+}
+init();
+</script>
+</body>
+</html>
